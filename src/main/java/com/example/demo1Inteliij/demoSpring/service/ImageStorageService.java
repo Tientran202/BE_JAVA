@@ -47,7 +47,7 @@ public class ImageStorageService implements IStorageService {
             if (fileSizeInMegabytes > 5.0f) {
                 throw new RuntimeException("file must <= 5Mb");
             }
-            //file must be rename
+            //file must be renamed
             String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
             String generatedFileName = UUID.randomUUID().toString().replace("-", "");
             generatedFileName = generatedFileName + "." + fileExtension;
@@ -55,11 +55,12 @@ public class ImageStorageService implements IStorageService {
                     Paths.get(generatedFileName)
             ).normalize().toAbsolutePath();
             if (!detinationFilePath.getParent().equals(this.storageFolder.toAbsolutePath())) {
-                throw new RuntimeException("Cnnot store file outsize current diectory");
+                throw new RuntimeException("Can not store file outsize current directory");
             }
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, detinationFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
+            return generatedFileName;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
